@@ -1,0 +1,473 @@
+/** Implements a graphical snake. */
+class Snake {
+
+   field Array snakeBodyX;
+   field Array snakeBodyY;
+   field int headX;
+   field int headY;
+   field int tailX;
+   field int tailY;
+   field int headLocation;
+   field int headDirection;
+   field int tailLocation;
+   field int tailDirection;   
+   field int length;
+   field boolean isAlive;
+
+   /** Constructs a new snake with a given location and size. */
+   constructor Snake new(int initialX, int initialY) {
+      let isAlive = true;
+      let headDirection = 4;
+      let tailDirection = 4;
+      
+      let headX = initialX + 1;
+      let headY = initialY;
+      let headLocation = calculateLocation(headX, headY);
+      do drawHead();
+
+      let tailX = initialX - 1;
+      let tailY = initialY;
+      let tailLocation = calculateLocation(tailX, tailY);
+      do drawTail();
+
+      do drawBody(calculateLocation(initialX, initialY));
+      
+      let snakeBodyX = Array.new(512);
+      let snakeBodyX[0] = tailX;
+      let snakeBodyX[1] = initialX;
+      let snakeBodyX[2] = headX;
+
+      let snakeBodyY = Array.new(512);
+      let snakeBodyY[0] = tailY;
+      let snakeBodyY[1] = initialY;
+      let snakeBodyY[2] = headY;
+
+      let length = 3;
+      return this;
+   }
+
+   method boolean getIsAlive(){
+      return isAlive;
+   }
+
+   method int getPoints(){
+      return length - 3;
+   }
+
+   method int getHeadLocation(){
+      return headLocation;
+   }
+
+   /** Disposes this snake. */
+   method int getLength() {
+      return length;
+   }
+   /** Disposes this snake. */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   /** Draws the head of the snake on the screen. */
+   method void drawHead() {
+      var int memAddress; 
+      let memAddress = 16384 + headLocation;
+      if (headDirection = 1){
+         do Memory.poke(memAddress+0, 960);
+         do Memory.poke(memAddress+32, 3504);
+         do Memory.poke(memAddress+64, 6544);
+         do Memory.poke(memAddress+96, 6552);
+         do Memory.poke(memAddress+128, 4488);
+         do Memory.poke(memAddress+160, 12684);
+         do Memory.poke(memAddress+192, 16380);
+         do Memory.poke(memAddress+224, 16380);
+         do Memory.poke(memAddress+256, 32766);
+         do Memory.poke(memAddress+288, 32766);
+         do Memory.poke(memAddress+320, 32766);
+         do Memory.poke(memAddress+352, -1);
+         do Memory.poke(memAddress+384, -1);
+         do Memory.poke(memAddress+416, -1);
+         do Memory.poke(memAddress+448, -1);
+         do Memory.poke(memAddress+480, -1);
+      }
+      if (headDirection = 2){
+         do Memory.poke(memAddress+0, -1);
+         do Memory.poke(memAddress+32, -1);
+         do Memory.poke(memAddress+64, -1);
+         do Memory.poke(memAddress+96, -1);
+         do Memory.poke(memAddress+128, -1);
+         do Memory.poke(memAddress+160, 32766);
+         do Memory.poke(memAddress+192, 32766);
+         do Memory.poke(memAddress+224, 32766);
+         do Memory.poke(memAddress+256, 16380);
+         do Memory.poke(memAddress+288, 16380);
+         do Memory.poke(memAddress+320, 12684);
+         do Memory.poke(memAddress+352, 4488);
+         do Memory.poke(memAddress+384, 6552);
+         do Memory.poke(memAddress+416, 2456);
+         do Memory.poke(memAddress+448, 3504);
+         do Memory.poke(memAddress+480, 960);
+      }
+      if (headDirection = 3){
+         do Memory.poke(memAddress+0, -2048);
+         do Memory.poke(memAddress+32, -256);
+         do Memory.poke(memAddress+64, -32);
+         do Memory.poke(memAddress+96, -4);
+         do Memory.poke(memAddress+128, -50);
+         do Memory.poke(memAddress+160, -62);
+         do Memory.poke(memAddress+192, -63);
+         do Memory.poke(memAddress+224, -1);
+         do Memory.poke(memAddress+256, -1);
+         do Memory.poke(memAddress+288, -63);
+         do Memory.poke(memAddress+320, -62);
+         do Memory.poke(memAddress+352, -50);
+         do Memory.poke(memAddress+384, -8);
+         do Memory.poke(memAddress+416, -32);
+         do Memory.poke(memAddress+448, -256);
+         do Memory.poke(memAddress+480, -2048);
+      }
+      if (headDirection = 4){
+         do Memory.poke(memAddress+0, 31);
+         do Memory.poke(memAddress+32, 255);
+         do Memory.poke(memAddress+64, 2047);
+         do Memory.poke(memAddress+96, 8191);
+         do Memory.poke(memAddress+128, 29695);
+         do Memory.poke(memAddress+160, 17407);
+         do Memory.poke(memAddress+192, -31745);
+         do Memory.poke(memAddress+224, -1);
+         do Memory.poke(memAddress+256, -1);
+         do Memory.poke(memAddress+288, -31745);
+         do Memory.poke(memAddress+320, 17407);
+         do Memory.poke(memAddress+352, 29695);
+         do Memory.poke(memAddress+384, 8191);
+         do Memory.poke(memAddress+416, 2047);
+         do Memory.poke(memAddress+448, 255);
+         do Memory.poke(memAddress+480, 31);
+      }
+      return;
+      }
+
+   
+      method void drawHeadDown() {
+      var int memAddress; 
+      let memAddress = 16384 + 32;
+      do Screen.setColor(true);
+      do Memory.poke(memAddress+0, -1);
+      do Memory.poke(memAddress+32, -1);
+      do Memory.poke(memAddress+64, -1);
+      do Memory.poke(memAddress+96, -1);
+      do Memory.poke(memAddress+128, -1);
+      do Memory.poke(memAddress+160, 32766);
+      do Memory.poke(memAddress+192, 32766);
+      do Memory.poke(memAddress+224, 32766);
+      do Memory.poke(memAddress+256, 16380);
+      do Memory.poke(memAddress+288, 16380);
+      do Memory.poke(memAddress+320, 12684);
+      do Memory.poke(memAddress+352, 4488);
+      do Memory.poke(memAddress+384, 6552);
+      do Memory.poke(memAddress+416, 2456);
+      do Memory.poke(memAddress+448, 3504);
+      do Memory.poke(memAddress+480, 960);
+      return;
+   }
+   
+   /** Draws black 16x16px square on the screen. */
+   method void drawBody(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+      do Memory.poke(memAddress+0, -1);
+      do Memory.poke(memAddress+32, -1);
+      do Memory.poke(memAddress+64, -1);
+      do Memory.poke(memAddress+96, -1);
+      do Memory.poke(memAddress+128, -1);
+      do Memory.poke(memAddress+160, -1);
+      do Memory.poke(memAddress+192, -1);
+      do Memory.poke(memAddress+224, -1);
+      do Memory.poke(memAddress+256, -1);
+      do Memory.poke(memAddress+288, -1);
+      do Memory.poke(memAddress+320, -1);
+      do Memory.poke(memAddress+352, -1);
+      do Memory.poke(memAddress+384, -1);
+      do Memory.poke(memAddress+416, -1);
+      do Memory.poke(memAddress+448, -1);
+      do Memory.poke(memAddress+480, -1);
+      return;
+   }
+
+   /** Draws white 16x16px square on the screen. */
+   method void eraseBody(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+      do Memory.poke(memAddress+0, 0);
+      do Memory.poke(memAddress+32, 0);
+      do Memory.poke(memAddress+64, 0);
+      do Memory.poke(memAddress+96, 0);
+      do Memory.poke(memAddress+128, 0);
+      do Memory.poke(memAddress+160, 0);
+      do Memory.poke(memAddress+192, 0);
+      do Memory.poke(memAddress+224, 0);
+      do Memory.poke(memAddress+256, 0);
+      do Memory.poke(memAddress+288, 0);
+      do Memory.poke(memAddress+320, 0);
+      do Memory.poke(memAddress+352, 0);
+      do Memory.poke(memAddress+384, 0);
+      do Memory.poke(memAddress+416, 0);
+      do Memory.poke(memAddress+448, 0);
+      do Memory.poke(memAddress+480, 0);
+      return;
+   }
+   
+
+   /** Draws the tail of the snake on the screen. */
+   method void drawTail() {
+      var int memAddress; 
+      let memAddress = 16384 +  tailLocation;
+      if (tailDirection = 1) {
+         do Memory.poke(memAddress+0, -1);
+         do Memory.poke(memAddress+32, -1);
+         do Memory.poke(memAddress+64, 32766);
+         do Memory.poke(memAddress+96, 32766);
+         do Memory.poke(memAddress+128, 16380);
+         do Memory.poke(memAddress+160, 16380);
+         do Memory.poke(memAddress+192, 8184);
+         do Memory.poke(memAddress+224, 8184);
+         do Memory.poke(memAddress+256, 4080);
+         do Memory.poke(memAddress+288, 4080);
+         do Memory.poke(memAddress+320, 2016);
+         do Memory.poke(memAddress+352, 2016);
+         do Memory.poke(memAddress+384, 960);
+         do Memory.poke(memAddress+416, 960);
+         do Memory.poke(memAddress+448, 384);
+         do Memory.poke(memAddress+480, 384);
+      }
+      if (tailDirection = 2) {
+         do Memory.poke(memAddress+0, 384);
+         do Memory.poke(memAddress+32, 384);
+         do Memory.poke(memAddress+64, 960);
+         do Memory.poke(memAddress+96, 960);
+         do Memory.poke(memAddress+128, 2016);
+         do Memory.poke(memAddress+160, 2016);
+         do Memory.poke(memAddress+192, 4080);
+         do Memory.poke(memAddress+224, 4080);
+         do Memory.poke(memAddress+256, 8184);
+         do Memory.poke(memAddress+288, 8184);
+         do Memory.poke(memAddress+320, 16380);
+         do Memory.poke(memAddress+352, 16380);
+         do Memory.poke(memAddress+384, 32766);
+         do Memory.poke(memAddress+416, 32766);
+         do Memory.poke(memAddress+448, -1);
+         do Memory.poke(memAddress+480, -1);
+      }
+      if (tailDirection = 3) {
+         do Memory.poke(memAddress+0, 3);
+         do Memory.poke(memAddress+32, 15);
+         do Memory.poke(memAddress+64, 63);
+         do Memory.poke(memAddress+96, 255);
+         do Memory.poke(memAddress+128, 1023);
+         do Memory.poke(memAddress+160, 4095);
+         do Memory.poke(memAddress+192, 16383);
+         do Memory.poke(memAddress+224, -1);
+         do Memory.poke(memAddress+256, -1);
+         do Memory.poke(memAddress+288, 16383);
+         do Memory.poke(memAddress+320, 4095);
+         do Memory.poke(memAddress+352, 1023);
+         do Memory.poke(memAddress+384, 255);
+         do Memory.poke(memAddress+416, 63);
+         do Memory.poke(memAddress+448, 15);
+         do Memory.poke(memAddress+480, 3);
+      }
+      if (tailDirection = 4) {
+         do Memory.poke(memAddress+0, -16384);
+         do Memory.poke(memAddress+32, -4096);
+         do Memory.poke(memAddress+64, -1024);
+         do Memory.poke(memAddress+96, -256);
+         do Memory.poke(memAddress+128, -64);
+         do Memory.poke(memAddress+160, -16);
+         do Memory.poke(memAddress+192, -4);
+         do Memory.poke(memAddress+224, -1);
+         do Memory.poke(memAddress+256, -1);
+         do Memory.poke(memAddress+288, -4);
+         do Memory.poke(memAddress+320, -16);
+         do Memory.poke(memAddress+352, -64);
+         do Memory.poke(memAddress+384, -256);
+         do Memory.poke(memAddress+416, -1024);
+         do Memory.poke(memAddress+448, -4096);
+         do Memory.poke(memAddress+480, -16384);
+      }
+      return;
+      }
+
+
+   
+      /** Moves the snake down. */
+   method void moveDown() {
+      if ((headY + 1) > 15) {
+         let headY = -1;
+         // let isAlive = false;
+         // return;
+      }
+      if (isCollision(headX, headY + 1)){
+         let isAlive = false;
+         return;
+      } else {         
+         do updateBody();
+         
+         do drawBody(headLocation);
+         let headY = headY + 1;
+         let headLocation = calculateLocation(headX, headY);
+         let snakeBodyX[length - 1] = headX;
+         let snakeBodyY[length - 1] = headY;
+         let headDirection = 2;
+         do drawHead();
+         
+         do eraseBody(tailLocation);
+         let tailLocation = calculateLocation(snakeBodyX[0], snakeBodyY[0]);
+         do eraseBody(tailLocation);
+         do updateTailDirection();
+         do drawTail();
+         do Sys.wait(100);
+         }
+         return;
+      }   
+   
+      /** Moves the snake up. */
+   method void moveUp() {
+      if ((headY - 1) < 0) {
+         let headY = 16;
+         // let isAlive = false;
+         // return;
+      }
+      if (isCollision(headX, headY - 1)){
+         let isAlive = false;
+         return;
+      } else {
+         do updateBody();
+         do drawBody(headLocation);
+         let headY = headY - 1;
+         let headLocation = calculateLocation(headX, headY);
+         let snakeBodyX[length - 1] = headX;
+         let snakeBodyY[length - 1] = headY;
+         let headDirection = 1;
+         do drawHead();
+         
+         do eraseBody(tailLocation);
+         let tailLocation = calculateLocation(snakeBodyX[0], snakeBodyY[0]);
+         do eraseBody(tailLocation);
+         do updateTailDirection();
+         do drawTail();
+         do Sys.wait(100);
+         }
+         return;
+      }
+      
+   /** Moves the snake left. */
+   method void moveLeft() {
+      if ((headX - 1) < 0) {
+         let headX = 32;
+         // let isAlive = false;
+         // return;
+      }
+      if (isCollision(headX - 1, headY)){
+         let isAlive = false;
+         return;
+      } else {
+         do updateBody();
+         
+         do drawBody(headLocation);
+         let headX = headX - 1;
+         let headLocation = calculateLocation(headX, headY);
+         let snakeBodyX[length - 1] = headX;
+         let snakeBodyY[length - 1] = headY;
+         let headDirection = 3;
+         do drawHead();
+         
+         do eraseBody(tailLocation);
+         let tailLocation = calculateLocation(snakeBodyX[0], snakeBodyY[0]);
+         do eraseBody(tailLocation);
+         do updateTailDirection();
+         do drawTail();
+         do Sys.wait(100);
+      }
+      return;
+   }
+
+   /** Moves the snake right. */
+   method void moveRight() {
+      if ((headX + 1) > 31) {
+         let headX = -1;
+         // let isAlive = false;
+         // return;
+      }
+      if (isCollision(headX + 1, headY)){
+         let isAlive = false;
+         return;
+      } else {
+         do updateBody();
+
+         do drawBody(headLocation);
+         let headX = headX + 1;
+         let headLocation = calculateLocation(headX, headY);
+         let snakeBodyX[length - 1] = headX;
+         let snakeBodyY[length - 1] = headY;
+         let headDirection = 4;
+         do drawHead();
+
+         do eraseBody(tailLocation);
+
+         let tailLocation = calculateLocation(snakeBodyX[0], snakeBodyY[0]);
+         do eraseBody(tailLocation);
+         do updateTailDirection();
+         do drawTail();
+         do Sys.wait(100);
+      }
+      return;
+   }
+
+   method void updateTailDirection(){
+      if (snakeBodyX[0] < snakeBodyX[1]){ let tailDirection = 4; }
+      if (snakeBodyX[0] > snakeBodyX[1]){ let tailDirection = 3; }
+      if (snakeBodyY[0] < snakeBodyY[1]){ let tailDirection = 2; }
+      if (snakeBodyY[0] > snakeBodyY[1]){ let tailDirection = 1; }
+      return;
+   }
+
+   method void updateBody(){
+      var int index;
+      let index = 0;
+      while (index < (length - 1)){
+         let snakeBodyX[index] = snakeBodyX[index + 1];
+         let snakeBodyY[index] = snakeBodyY[index + 1];
+         let index = index + 1;
+      }
+      return;
+   }
+
+   method boolean isCollision(int nextX, int nextY){
+      var int nextLocation;
+      var int memAddress;
+      let nextLocation = calculateLocation(nextX, nextY);
+      
+      let memAddress = 16384 + nextLocation;
+      if (~(Memory.peek(memAddress+224) = 0)){
+         if ((Memory.peek(memAddress+224) = 8188)) {
+            return false;
+         }
+         return true;
+      } 
+      return false;
+   }
+
+   method void snakeGrowth(){
+      var int index;
+      if (length < 512){
+         let length = length + 1;
+         let snakeBodyX[length - 1] = snakeBodyX[length - 2];
+         let snakeBodyY[length - 1] = snakeBodyY[length - 2];
+      }      
+      return;
+   }
+
+   method int calculateLocation (int x, int y) {
+      return (y * 512) + x;
+   }
+}

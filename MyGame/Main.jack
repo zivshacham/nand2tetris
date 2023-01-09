@@ -1,0 +1,17 @@
+/** Initializes a new Snake game and starts running it. */
+class Main {
+    function void main() {
+        var SnakeGame game;
+        do PreGame.startFirstPreGame();
+        let game = SnakeGame.new();
+        do game.run();
+        do game.dispose();
+
+        while (PreGame.startAnotherPreGame()){
+            let game = SnakeGame.new();
+            do game.run();
+            do game.dispose();
+        }
+        return;
+    }
+}

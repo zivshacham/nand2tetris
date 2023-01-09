@@ -1,0 +1,52 @@
+class Food {
+
+    field int location; // screen location of the food icon
+
+    /** Constructs a new food with a random location. */
+    constructor Food new() {
+        let location = calculateSquare(Random.randRange(511));
+        do draw();
+        return this;
+    }
+
+    method void draw() {
+        var int memAddress; 
+        let memAddress = 16384 + location;
+        do Memory.poke(memAddress+32, 112);
+        do Memory.poke(memAddress+64, 128);
+        do Memory.poke(memAddress+96, 128);
+        do Memory.poke(memAddress+128, 8184);
+        do Memory.poke(memAddress+160, 8188);
+        do Memory.poke(memAddress+192, 8188);
+        do Memory.poke(memAddress+224, 8188);
+        do Memory.poke(memAddress+256, 8188);
+        do Memory.poke(memAddress+288, 8188);
+        do Memory.poke(memAddress+320, 8188);
+        do Memory.poke(memAddress+352, 8188);
+        do Memory.poke(memAddress+384, 8188);
+        do Memory.poke(memAddress+416, 4088);
+        return;
+    }
+
+    method int getLocation(){
+        return location;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method int calculateSquare (int squareLocation) {
+        var int remain;
+        var int result;
+        let remain = squareLocation;
+        let result = 0;
+        while (remain > 32) {
+            let remain = remain - 32;
+        }
+        let result = result + remain;
+        let result = result + ((squareLocation / 32) * 512);
+        return result;
+    }
+}

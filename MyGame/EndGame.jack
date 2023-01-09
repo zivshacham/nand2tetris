@@ -1,0 +1,20 @@
+class EndGame{
+
+    function void startEndGame(int points){
+        var char key;  // the key currently pressed by the user
+        let key = Keyboard.keyPressed();
+        do Sys.wait(300);
+        do Screen.clearScreen();
+
+        do Output.moveCursor(10, 26);
+        do Output.printString("GAME OVER!");
+        do Output.println();
+        do Output.moveCursor(12, 23);
+        do Output.printString("You got ");
+        do Output.printInt(points);
+        do Output.printString(" points");
+        do Sys.wait(2000);
+        do Screen.clearScreen();
+        return;
+    }
+}

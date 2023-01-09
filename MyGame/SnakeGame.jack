@@ -1,0 +1,108 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/09/Square/SquareGame.jack
+
+/**
+ * Implements the Square Dance game.
+ * This simple game allows the user to move a black square around
+ * the screen, and change the square's size during the movement.
+ * When the game starts, a square of 30 by 30 pixels is shown at the
+ * top-left corner of the screen. The user controls the square as follows.
+ * The 4 arrow keys are used to move the square up, down, left, and right.
+ * The 'z' and 'x' keys are used, respectively, to decrement and increment
+ * the square's size. The 'q' key is used to quit the game.
+ */
+
+class SnakeGame {
+   field Snake snake; // the snake of this game
+   field Food food; // the food of this game
+   field int direction; // the snake's current direction: 
+                        // 0=none, 1=up, 2=down, 3=left, 4=right
+
+   /** Constructs a new snake Game. */
+    constructor SnakeGame new() {
+        // Creates a 3 squares snake, turning to right in the center of the screen.
+        let snake = Snake.new(15,8);
+        // Creates a new food icon at a random place in the screen
+        let food = Food.new();
+        let direction = 0;  // initial state is no movement
+        return this;
+    }
+
+   /** Disposes this game. */
+    method void dispose() {
+        do snake.dispose();
+        do food.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void checkIfEaten(){
+        var int foodLocation;
+        var int nextLocation;
+        var int memAddress;
+        
+        let foodLocation = food.getLocation();
+        let memAddress = 16384 + foodLocation;
+        if (~(Memory.peek(memAddress+224) = 8188)){
+            do snake.snakeGrowth();
+            let food = Food.new();
+        } 
+        return;
+    }
+
+   /** Moves the square in the current direction. */
+    method void moveSnake() {
+        if (direction = 1) { do snake.moveUp(); }
+        if (direction = 2) { do snake.moveDown(); }
+        if (direction = 3) { do snake.moveLeft(); }
+        if (direction = 4) { do snake.moveRight(); }
+        do Sys.wait(1);  // delays the next movement
+        return;
+    }
+
+   /** Runs the game: handles the user's inputs and moves the square accordingly */
+    method void run() {
+        var char key;  // the key currently pressed by the user
+        var boolean exit;
+        var int index;
+        // let exit = false;
+
+        while (true) {
+        // waits for a key to be pressed
+        while (key = 0) {
+            let key = Keyboard.keyPressed();
+            if (~snake.getIsAlive()) {
+                do EndGame.startEndGame(snake.getPoints());
+                return;
+            }
+            do checkIfEaten();
+            do moveSnake();
+        }
+        if (~snake.getIsAlive()) { 
+            do EndGame.startEndGame(snake.getPoints());
+            return; 
+        }
+        if (key = 81)  {
+            do EndGame.startEndGame(snake.getPoints());
+            return;
+        }     // q key
+        if (key = 131) { let direction = 1; }   // up arrow
+        if (key = 133) { let direction = 2; }   // down arrow
+        if (key = 130) { let direction = 3; }   // left arrow
+        if (key = 132) { let direction = 4; }   // right arrow
+
+         // waits for the key to be released
+        while (~(key = 0)) {
+            let key = Keyboard.keyPressed();
+            do checkIfEaten();
+            do moveSnake();
+        }
+     } // while
+    return;
+    }
+}
+
+
+
