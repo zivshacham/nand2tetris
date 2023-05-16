@@ -303,8 +303,6 @@ class Snake {
    method void moveDown() {
       if ((headY + 1) > 15) {
          let headY = -1;
-         // let isAlive = false;
-         // return;
       }
       if (isCollision(headX, headY + 1)){
          let isAlive = false;
@@ -334,8 +332,6 @@ class Snake {
    method void moveUp() {
       if ((headY - 1) < 0) {
          let headY = 16;
-         // let isAlive = false;
-         // return;
       }
       if (isCollision(headX, headY - 1)){
          let isAlive = false;
@@ -364,8 +360,6 @@ class Snake {
    method void moveLeft() {
       if ((headX - 1) < 0) {
          let headX = 32;
-         // let isAlive = false;
-         // return;
       }
       if (isCollision(headX - 1, headY)){
          let isAlive = false;
@@ -395,8 +389,6 @@ class Snake {
    method void moveRight() {
       if ((headX + 1) > 31) {
          let headX = -1;
-         // let isAlive = false;
-         // return;
       }
       if (isCollision(headX + 1, headY)){
          let isAlive = false;

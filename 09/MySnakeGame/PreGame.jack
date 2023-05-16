@@ -1,0 +1,273 @@
+class PreGame{
+
+    function void startFirstPreGame(){
+        var char key;  // the key currently pressed by the user
+        let key = Keyboard.keyPressed();
+        do Output.moveCursor(1, 15);
+        do Output.printString("Hello and welcome to the Snake game!");
+        do Output.moveCursor(4, 10);
+        do Output.printString("Your goal is to eat as many apples as you can");
+        do Output.moveCursor(6, 17);
+        do Output.printString("without hitting the snake's body");
+        do Output.moveCursor(9, 27);
+        do Output.printString("Controls:");
+        do Output.moveCursor(11, 9);
+        do Output.printString("Use the arrow buttons to move around the field");
+        do Output.moveCursor(13, 2);
+        do Output.printString("The snake will start moving once you press any arrow button");
+        do Output.moveCursor(15, 8);
+        do Output.printString("Notice the snake can go through the field's walls");
+        do Output.moveCursor(19, 20);
+        do Output.printString("press x to start the game");
+        while (~(key = 88)){
+            let key = Keyboard.keyPressed();
+        }
+        do Screen.clearScreen();
+        return;
+    }
+
+    function boolean startAnotherPreGame(){
+        var char key;  // the key currently pressed by the user
+        let key = Keyboard.keyPressed();
+        do Output.moveCursor(10, 18);
+        do Output.printString("Do you want to play again?");
+        do Output.moveCursor(12, 16);
+        do Output.printString("press x to start another game");
+        do Output.moveCursor(14, 18);
+        do Output.printString("press z to end the game");
+        while (~(key = 88)){
+            let key = Keyboard.keyPressed();
+            if (key = 90) {return false;}
+        }
+        do Screen.clearScreen();
+        return true;
+    }
+
+    function void startImage() {
+        // Draw 's'
+        do PreGame.drawBlack(3076);
+        do PreGame.drawBlack(3077);
+        do PreGame.drawHeadRight(3078);
+        do PreGame.drawBlack(3588);
+        do PreGame.drawBlack(4100);
+        do PreGame.drawBlack(4101);
+        do PreGame.drawBlack(4102);
+        do PreGame.drawBlack(4614);
+        do PreGame.drawBlack(5126);
+        do PreGame.drawBlack(5125);
+        do PreGame.drawTailLeft(5124);
+        // Draw 'n'
+        do PreGame.drawBlack (3081);
+        do PreGame.drawBlack (3082);
+        do PreGame.drawBlack (3083);
+        do PreGame.drawBlack (3593);
+        do PreGame.drawBlack (3595);
+        do PreGame.drawBlack (4105);
+        do PreGame.drawBlack (4107);
+        do PreGame.drawBlack (4617);
+        do PreGame.drawBlack (4619);
+        do PreGame.drawTailDown (5129);
+        do PreGame.drawHeadDown (5131);
+        // Draw 'a'
+        do PreGame.drawBlack (3086);
+        do PreGame.drawBlack (3087);
+        do PreGame.drawBlack (3088);
+        do PreGame.drawBlack (3598);
+        do PreGame.drawBlack (3600);
+        do PreGame.drawBlack (4110);
+        do PreGame.drawBlack (4112);
+        do PreGame.drawBlack (4622);
+        do PreGame.drawTailRight (4623);
+        do PreGame.drawBlack (4624);
+        do PreGame.drawBlack (5136);
+        do PreGame.drawHeadRight (5137);
+        // Draw 'k'
+        do PreGame.drawHeadUp (3091);
+        do PreGame.drawBlack (3094);
+        do PreGame.drawBlack (3603);
+        do PreGame.drawBlack (3605);
+        do PreGame.drawBlack (4115);
+        do PreGame.drawBlack (4116);
+        do PreGame.drawBlack (4627);
+        do PreGame.drawBlack (4629);
+        do PreGame.drawTailDown (5139);
+        do PreGame.drawBlack (5142);
+        // Draw 'e'
+        do PreGame.drawBlack (3097);
+        do PreGame.drawBlack (3098);
+        do PreGame.drawBlack (3099);
+        do PreGame.drawBlack (3609);
+        do PreGame.drawBlack (3611);
+        do PreGame.drawBlack (4121);
+        do PreGame.drawTailLeft (4122);
+        do PreGame.drawBlack (4123);
+        do PreGame.drawBlack (4633);
+        do PreGame.drawBlack (5145);
+        do PreGame.drawBlack (5146);
+        do PreGame.drawHeadRight (5147);
+        do Output.moveCursor(22, 2);
+        do Output.printString("All rights reserved to Ziv Shacham and Nimrod Goldstein 2023");
+        return;
+    }
+
+     /** Draws black 16x16px square on the screen. */
+    function void drawBlack(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+      do Memory.poke(memAddress+0, -1);
+      do Memory.poke(memAddress+32, -1);
+      do Memory.poke(memAddress+64, -1);
+      do Memory.poke(memAddress+96, -1);
+      do Memory.poke(memAddress+128, -1);
+      do Memory.poke(memAddress+160, -1);
+      do Memory.poke(memAddress+192, -1);
+      do Memory.poke(memAddress+224, -1);
+      do Memory.poke(memAddress+256, -1);
+      do Memory.poke(memAddress+288, -1);
+      do Memory.poke(memAddress+320, -1);
+      do Memory.poke(memAddress+352, -1);
+      do Memory.poke(memAddress+384, -1);
+      do Memory.poke(memAddress+416, -1);
+      do Memory.poke(memAddress+448, -1);
+      do Memory.poke(memAddress+480, -1);
+      return;
+    }
+
+   /** Draws snake's head 16x16px on the screen. */
+    function void drawHeadRight(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+        do Memory.poke(memAddress+0, 31);
+        do Memory.poke(memAddress+32, 255);
+        do Memory.poke(memAddress+64, 2047);
+        do Memory.poke(memAddress+96, 8191);
+        do Memory.poke(memAddress+128, 29695);
+        do Memory.poke(memAddress+160, 17407);
+        do Memory.poke(memAddress+192, -31745);
+        do Memory.poke(memAddress+224, -1);
+        do Memory.poke(memAddress+256, -1);
+        do Memory.poke(memAddress+288, -31745);
+        do Memory.poke(memAddress+320, 17407);
+        do Memory.poke(memAddress+352, 29695);
+        do Memory.poke(memAddress+384, 8191);
+        do Memory.poke(memAddress+416, 2047);
+        do Memory.poke(memAddress+448, 255);
+        do Memory.poke(memAddress+480, 31);
+      return;
+    }
+
+   /** Draws snake's head 16x16px on the screen. */
+    function void drawHeadDown(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+        do Memory.poke(memAddress+0, -1);
+      do Memory.poke(memAddress+32, -1);
+      do Memory.poke(memAddress+64, -1);
+      do Memory.poke(memAddress+96, -1);
+      do Memory.poke(memAddress+128, -1);
+      do Memory.poke(memAddress+160, 32766);
+      do Memory.poke(memAddress+192, 32766);
+      do Memory.poke(memAddress+224, 32766);
+      do Memory.poke(memAddress+256, 16380);
+      do Memory.poke(memAddress+288, 16380);
+      do Memory.poke(memAddress+320, 12684);
+      do Memory.poke(memAddress+352, 4488);
+      do Memory.poke(memAddress+384, 6552);
+      do Memory.poke(memAddress+416, 2456);
+      do Memory.poke(memAddress+448, 3504);
+      do Memory.poke(memAddress+480, 960);
+      return;
+    }
+
+   /** Draws snake's head 16x16px on the screen. */
+    function void drawHeadUp(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+        do Memory.poke(memAddress+0, 960);
+        do Memory.poke(memAddress+32, 3504);
+        do Memory.poke(memAddress+64, 6544);
+        do Memory.poke(memAddress+96, 6552);
+        do Memory.poke(memAddress+128, 4488);
+        do Memory.poke(memAddress+160, 12684);
+        do Memory.poke(memAddress+192, 16380);
+        do Memory.poke(memAddress+224, 16380);
+        do Memory.poke(memAddress+256, 32766);
+        do Memory.poke(memAddress+288, 32766);
+        do Memory.poke(memAddress+320, 32766);
+        do Memory.poke(memAddress+352, -1);
+        do Memory.poke(memAddress+384, -1);
+        do Memory.poke(memAddress+416, -1);
+        do Memory.poke(memAddress+448, -1);
+        do Memory.poke(memAddress+480, -1);
+      return;
+    }
+
+   /** Draws snake's tail 16x16px on the screen. */
+    function void drawTailLeft(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+        do Memory.poke(memAddress+0, -16384);
+        do Memory.poke(memAddress+32, -4096);
+        do Memory.poke(memAddress+64, -1024);
+        do Memory.poke(memAddress+96, -256);
+        do Memory.poke(memAddress+128, -64);
+        do Memory.poke(memAddress+160, -16);
+        do Memory.poke(memAddress+192, -4);
+        do Memory.poke(memAddress+224, -1);
+        do Memory.poke(memAddress+256, -1);
+        do Memory.poke(memAddress+288, -4);
+        do Memory.poke(memAddress+320, -16);
+        do Memory.poke(memAddress+352, -64);
+        do Memory.poke(memAddress+384, -256);
+        do Memory.poke(memAddress+416, -1024);
+        do Memory.poke(memAddress+448, -4096);
+        do Memory.poke(memAddress+480, -16384);
+      return;
+   }
+
+    /** Draws snake's tail 16x16px on the screen. */
+    function void drawTailDown(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -1);
+        do Memory.poke(memAddress+64, 32766);
+        do Memory.poke(memAddress+96, 32766);
+        do Memory.poke(memAddress+128, 16380);
+        do Memory.poke(memAddress+160, 16380);
+        do Memory.poke(memAddress+192, 8184);
+        do Memory.poke(memAddress+224, 8184);
+        do Memory.poke(memAddress+256, 4080);
+        do Memory.poke(memAddress+288, 4080);
+        do Memory.poke(memAddress+320, 2016);
+        do Memory.poke(memAddress+352, 2016);
+        do Memory.poke(memAddress+384, 960);
+        do Memory.poke(memAddress+416, 960);
+        do Memory.poke(memAddress+448, 384);
+        do Memory.poke(memAddress+480, 384);
+      return;
+   }
+
+   /** Draws snake's tail 16x16px on the screen. */
+    function void drawTailRight(int location) {
+      var int memAddress; 
+      let memAddress = 16384 + location;
+        do Memory.poke(memAddress+0, 3);
+        do Memory.poke(memAddress+32, 15);
+        do Memory.poke(memAddress+64, 63);
+        do Memory.poke(memAddress+96, 255);
+        do Memory.poke(memAddress+128, 1023);
+        do Memory.poke(memAddress+160, 4095);
+        do Memory.poke(memAddress+192, 16383);
+        do Memory.poke(memAddress+224, -1);
+        do Memory.poke(memAddress+256, -1);
+        do Memory.poke(memAddress+288, 16383);
+        do Memory.poke(memAddress+320, 4095);
+        do Memory.poke(memAddress+352, 1023);
+        do Memory.poke(memAddress+384, 255);
+        do Memory.poke(memAddress+416, 63);
+        do Memory.poke(memAddress+448, 15);
+        do Memory.poke(memAddress+480, 3);
+      return;
+    }
+}

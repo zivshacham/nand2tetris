@@ -2,6 +2,9 @@
 class Main {
     function void main() {
         var SnakeGame game;
+        do PreGame.startImage();
+        do Sys.wait(4000);
+        do Screen.clearScreen();
         do PreGame.startFirstPreGame();
         let game = SnakeGame.new();
         do game.run();
