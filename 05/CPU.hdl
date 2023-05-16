@@ -1,0 +1,111 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+
+/**
+ * The Hack CPU (Central Processing unit), consisting of an ALU,
+ * two registers named A and D, and a program counter named PC.
+ * The CPU is designed to fetch and execute instructions written in 
+ * the Hack machine language. In particular, functions as follows:
+ * Executes the inputted instruction according to the Hack machine 
+ * language specification. The D and A in the language specification
+ * refer to CPU-resident registers, while M refers to the external
+ * memory location addressed by A, i.e. to Memory[A]. The inM input 
+ * holds the value of this location. If the current instruction needs 
+ * to write a value to M, the value is placed in outM, the address 
+ * of the target location is placed in the addressM output, and the 
+ * writeM control bit is asserted. (When writeM==0, any value may 
+ * appear in outM). The outM and writeM outputs are combinational: 
+ * they are affected instantaneously by the execution of the current 
+ * instruction. The addressM and pc outputs are clocked: although they 
+ * are affected by the execution of the current instruction, they commit 
+ * to their new values only in the next time step. If reset==1 then the 
+ * CPU jumps to address 0 (i.e. pc is set to 0 in next time step) rather 
+ * than to the address resulting from executing the current instruction. 
+ */
+
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+    // get A and C instructions
+    Not(in=instruction[15], out=Ainstruction);
+    Not(in=Ainstruction, out=Cinstruction);
+
+    /** A register
+     *   IF it's A instruction (-> instruction[15] == 0)  
+     *   OR
+     *   it's A indicator is on (-> instruction[5] == 1)
+     *   THEN write the value from MUX16 into A register
+    */
+    Mux16(a=outALU, b[0..14]=instruction[0..14], b[15]=false, sel=Ainstruction, out=outMUX1);
+    Or(a=Ainstruction, b=instruction[5], out=loadA);
+    ARegister(in=outMUX1, load=loadA, out=outA, out[0..14]=addressM);
+
+    /** D register
+     *   IF D indicator is on (-> instruction[4] == 1)  
+     *   AND
+     *   it's C instruction (-> instruction[15] == 1)
+     *   THEN write the value from ALU into D register
+    */
+    And(a=instruction[4], b=instruction[15], out=loadD); 
+    DRegister(in=outALU, load=loadD, out=outD);
+
+    /** ALU
+     *   takes the input from D register and the MUX16
+     *   and the instructions from instruction[6..11]
+    */
+    Mux16(a=outA, b=inM, sel=instruction[12], out=outMUX2);
+    ALU(x=outD, y=outMUX2, 
+        zx=instruction[11], 
+        nx=instruction[10], 
+        zy=instruction[9], 
+        ny=instruction[8], 
+        f=instruction[7], 
+        no=instruction[6], 
+        out=outALU, out=outM, zr=outZR, ng=outNG);
+    
+    // PC (calculates J function)
+
+    // IF zr == 1 and j2 == 1 THEN JEQ = 1
+    And(a=outZR, b=instruction[1], out=JEQ);
+
+    // IF ng == 1 and j1 == 1 THEN JLT = 1
+    And(a=outNG, b=instruction[2], out=JLT);
+    
+    // Setting Zero or Negative or Positive indicators
+    Or(a=outZR, b=outNG, out=ZeroOrNeg);
+    Not(in=ZeroOrNeg, out=Positive);
+
+    // IF positive and j3 == 1 THEN JGT = 1
+    And(a=Positive, b=instruction[0], out=JGT);
+
+    // IF JEQ == 1 and JLT == 1 THEN JLE = 1
+    Or(a=JEQ, b=JLT, out=JLE);
+
+    // IF JLE == 1 or JGT == 1 THEN the program should jump to A
+    Or(a=JLE, b=JGT, out=JumpToA);
+
+    // IF it's C instruction and JumpToA indicator is ON THEN the program should load to PC
+    And(a=Cinstruction, b=JumpToA, out=loadPC);
+
+    // IF the program should load to PC -> it won't incremant the PC
+    Not(in=loadPC, out=incPC);
+
+    // Load the parameters to PC
+    PC(in=outA, load=loadPC, inc=incPC, reset=reset, out[0..14]=pc);
+
+    // writeM
+    And(a=instruction[3], b=instruction[15], out=writeM);
+}
