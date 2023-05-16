@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch JackCompiler",
+            "request": "launch",
+            "mainClass": "JackCompiler",
+            "projectName": "the new way copy_7b624e72",
+            "args": "../Pong"
+        },
+        {
+            "type": "java",
+            "name": "Launch JackAnalyzer",
+            "request": "launch",
+            "mainClass": "JackAnalyzer",
+            "projectName": "the new way copy_7b624e72",
+            "args": "../Pong"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch JackAnalyzer",
+            "request": "launch",
+            "mainClass": "JackAnalyzer",
+            "projectName": "JackCompiler_98bcb6db",
+            "args": "../ComplexArrays"
+        }
+    ]
+}
