@@ -1,0 +1,31 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/02/Or16Way.hdl
+
+/**
+ * 16-way Or: 
+ * out = (in[0] or in[1] or ... or in[15])
+ */
+
+CHIP Or16Way {
+    IN in[16];
+    OUT out;
+
+    PARTS:
+    Or(a=in[0], b=in[1], out=Res1);         // Or(in[0],in[1]) -> Res1
+    Or(a=Res1, b=in[2], out=Res2);         // Or(Res1,in[2]) -> Res2
+    Or(a=Res2, b=in[3], out=Res3);         // Or(Res2,in[3]) -> Res3
+    Or(a=Res3, b=in[4], out=Res4);         // Or(Res3,in[4]) -> Res4
+    Or(a=Res4, b=in[5], out=Res5);         // Or(Res4,in[5]) -> Res5
+    Or(a=Res5, b=in[6], out=Res6);         // Or(Res5,in[6]) -> Res6
+    Or(a=Res6, b=in[7], out=Res7);         // Or(Res6,in[7]) -> Res7
+    Or(a=Res7, b=in[8], out=Res8);         // Or(Res7,in[8]) -> Res8
+    Or(a=Res8, b=in[9], out=Res9);         // Or(Res8,in[9]) -> Res9
+    Or(a=Res9, b=in[10], out=Res10);         // Or(Res9,in[10]) -> Res10
+    Or(a=Res10, b=in[11], out=Res11);         // Or(Res10,in[11]) -> Res11
+    Or(a=Res11, b=in[12], out=Res12);         // Or(Res11,in[12]) -> Res12
+    Or(a=Res12, b=in[13], out=Res13);         // Or(Res12,in[13]) -> Res13
+    Or(a=Res13, b=in[14], out=Res14);         // Or(Res13,in[14]) -> Res14
+    Or(a=Res14, b=in[15], out=out);         // Or(Res14,in[15]) -> out
+}

@@ -1,0 +1,32 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/02/Adder16.hdl
+
+/**
+ * Adds two 16-bit values.
+ * The most significant carry bit is ignored.
+ */
+
+CHIP Add16 {
+    IN a[16], b[16];
+    OUT out[16];
+
+    PARTS:
+    HalfAdder(a=a[0], b=b[0], sum=out[0], carry=Add0);                      // HalfAdder(a[0],b[0]) -> out[0],Add0
+    FullAdder(a=Add0, b=a[1], c=b[1], sum=out[1], carry=Add1);              // FullAdder(Add0,a[1],b[1]) -> out[1],Add1
+    FullAdder(a=Add1, b=a[2], c=b[2], sum=out[2], carry=Add2);              // FullAdder(Add1,a[2],b[2]) -> out[2],Add2
+    FullAdder(a=Add2, b=a[3], c=b[3], sum=out[3], carry=Add3);              // FullAdder(Add2,a[3],b[3]) -> out[3],Add3
+    FullAdder(a=Add3, b=a[4], c=b[4], sum=out[4], carry=Add4);              // FullAdder(Add3,a[4],b[4]) -> out[4],Add4
+    FullAdder(a=Add4, b=a[5], c=b[5], sum=out[5], carry=Add5);              // FullAdder(Add4,a[5],b[5]) -> out[5],Add5
+    FullAdder(a=Add5, b=a[6], c=b[6], sum=out[6], carry=Add6);              // FullAdder(Add5,a[6],b[6]) -> out[6],Add6
+    FullAdder(a=Add6, b=a[7], c=b[7], sum=out[7], carry=Add7);              // FullAdder(Add6,a[7],b[7]) -> out[7],Add7
+    FullAdder(a=Add7, b=a[8], c=b[8], sum=out[8], carry=Add8);              // FullAdder(Add7,a[8],b[8]) -> out[8],Add8
+    FullAdder(a=Add8, b=a[9], c=b[9], sum=out[9], carry=Add9);              // FullAdder(Add8,a[9],b[9]) -> out[9],Add9
+    FullAdder(a=Add9, b=a[10], c=b[10], sum=out[10], carry=Add10);          // FullAdder(Add9,a[10],b[10]) -> out[10],Add10
+    FullAdder(a=Add10, b=a[11], c=b[11], sum=out[11], carry=Add11);         // FullAdder(Add10,a[11],b[11]) -> out[11],Add11
+    FullAdder(a=Add11, b=a[12], c=b[12], sum=out[12], carry=Add12);         // FullAdder(Add11,a[12],b[12]) -> out[12],Add12
+    FullAdder(a=Add12, b=a[13], c=b[13], sum=out[13], carry=Add13);         // FullAdder(Add12,a[13],b[13]) -> out[13],Add13
+    FullAdder(a=Add13, b=a[14], c=b[14], sum=out[14], carry=Add14);         // FullAdder(Add13,a[14],b[14]) -> out[14],Add14
+    FullAdder(a=Add14, b=a[15], c=b[15], sum=out[15], carry=Add15);         // FullAdder(Add14,a[15],b[15]) -> out[15],Add15
+}
